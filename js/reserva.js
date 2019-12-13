@@ -1,4 +1,4 @@
-var Reserva = function (horario, cantidaPersonas, precioPersona, codigoDescuento, ) {
+var Reserva = function (horario, cantidaPersonas, precioPersona, codigoDescuento) {
     this.horario = horario;
     this.cantidaPersonas = cantidaPersonas;
     this.precioPersona = precioPersona;
@@ -43,11 +43,6 @@ Reserva.prototype.descuentosPorCodigos = function () {
     }
 }
 
-Reserva.prototype.precioTotalReserva = function () {
-    var basePrecioFinal = this.precioReservaBase() + this.adicionales - this.descuentos
-    result = basePrecioFinal;
-}
-
 Reserva.prototype.adicionalesPorSemana = function () {
     let precioBase = this.precioReservaBase()
     const arraysSemana = ["Domingo", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado"];
@@ -55,13 +50,23 @@ Reserva.prototype.adicionalesPorSemana = function () {
     if (arraysSemana[diaSemana] == "Viernes" || arraysSemana[diaSemana] == "Sabado" || arraysSemana[diaSemana] == "Domingo") {
         return precioBase * 0.10;
     }
+    return 0;
 }
 
 Reserva.prototype.adicionalesPorHorarios = function(){
     let precioBase = this.precioReservaBase()
     const horaAdicionales = [13 , 14 , 20, 21];
-    const horas = this.horario.getUTCHours();
-    if(horaAdicionales == horas || horaAdicionales == horas || horaAdicionales == horas || horaAdicionales == horas){
-        return precioBase * 0.05
+    const horas = this.horario.getHours();
+    let horaSeleccionada = horaAdicionales.find(element => element == horas)
+    if(horaSeleccionada){
+        return precioBase * 0.05;
     }
+    return 0;
+}
+
+Reserva.prototype.precioTotalReserva = function () {
+    let totalAdicionales = this.adicionalesPorHorarios() + this.adicionalesPorSemana();
+    let totalDescuentos = this.descuentosPorCodigos() + this.descuentosPorGruposGrandes();
+    let precioFinal = this.precioReservaBase() + totalAdicionales - totalDescuentos;
+    return precioFinal;
 }

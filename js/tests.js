@@ -95,7 +95,7 @@ describe("Test de la función calificar", function(){
 
 describe("Testeá la función buscarRestaurante(id)", function(){
 
-    it("Testeá la función buscarRestaurante(1,2)", function(){
+    it("Testeá busca el restaurnate con el id correspondiente ", function(){
         let restaurantes = [new Restaurant(1), new Restaurant(2)]
         let listado = new Listado(restaurantes)
         let restaurante = listado.buscarRestaurante(2)
@@ -115,7 +115,7 @@ describe("Testeá la función buscarRestaurante(id)", function(){
 });
 
 describe("Testeá la función obtenerRestaurantes()", function() {
-    it("Testeá la función obtenerRestaurantes()", function() {
+    it("Test cuando se le pasan los filtros Asiática, Nueva York, 15:30 ", function() {
         
         let restaurant1 = new Restaurant(1, "TAO Uptown", "Asiática", "Nueva York", ["13:00", "15:30", "18:00"]);
         let restaurant2 = new Restaurant(2, "Mandarín Kitchen", "Asiática", "Londres", ["15:00", "14:30", "12:30"]);
@@ -148,13 +148,129 @@ describe("Testeá la función obtenerRestaurantes()", function() {
 //testing de reserva 
 
 describe("Test la función precioReservaBase ()", function(){
-     it("Test la función  precioReservaBase()", function(){
-        let fechaHora = new Date(2019, 11, 11, 20, 55); // te estan faltando parametros
-        let reserva = (fechaHora, 6, 500);
-        let resut = reserva.precioReservaBase (reserva, 6,500);
+     it("Test la funcion y devuelve el precio base de acuerdo a los datos: fechaHora, 4, 500 ", function(){
+        let fechaHora = new Date(2019, 11, 11, 20, 55);
+        let reserva = new Reserva(fechaHora, 4, 500);
+        let resut = reserva.precioReservaBase();
         
-        expect(3000).to.equal(resut);
-
+        expect(2000).to.equal(resut);
      })
-
 });
+
+describe("test la funcion descuentosPorGruposGrandes()", function(){
+    it("test la funcion cuando son 6 personas tiene un descuento del 5%", function(){
+        let fechaHora = new Date(2019, 11, 11, 20, 55); 
+        let reserva = new Reserva(fechaHora, 6, 500);
+        let resut = reserva.descuentosPorGruposGrandes();
+        
+        expect(150).to.equal(resut);
+
+    })
+
+    it("test la funcion cuando con 8 personas tienen un descuento del 10%", function(){
+        let fechaHora = new Date(2019, 11, 11, 20, 55); 
+        let reserva = new Reserva(fechaHora, 8, 400);
+        let resut = reserva.descuentosPorGruposGrandes();
+
+        expect(320).to.equal(resut);
+
+    })
+
+    it("test la funcion cuando son mas de 10 personas tienen un descuento del 15%", function(){
+        let fechaHora = new Date(2019, 11, 11, 20, 55); 
+        let reserva = new Reserva(fechaHora, 10, 550);
+        let resut = reserva.descuentosPorGruposGrandes();
+        
+        expect(825).to.equal(resut);
+
+    })
+
+ })
+
+describe("test la funcion descuentosPorCodigos()", function(){
+    it("test cuando el codigo descuento es DES15 ", function(){
+        let fechaHora = new Date(2019, 11, 13, 18, 35); 
+        let reserva = new Reserva(fechaHora, 5, 450, "DES15");
+        let resut = reserva.descuentosPorCodigos();
+        
+        expect(337.5).to.equal(resut);
+
+    })
+
+    it("test cuando el codigo descuento es DES200 ", function(){
+        let fechaHora = new Date(2019, 11, 13, 18, 35); 
+        let reserva = new Reserva(fechaHora, 5, 450, "DES200");
+        let resut = reserva.descuentosPorCodigos();
+        
+        expect(200).to.equal(resut);
+
+    })
+
+    it("test cuando el codigo descuento es DES1", function(){
+        let fechaHora = new Date(2019, 11, 13, 18, 35); 
+        let reserva = new Reserva(fechaHora, 7, 450, "DES1");
+        let resut = reserva.descuentosPorCodigos();
+        
+        expect(450).to.equal(resut);
+
+    })
+
+    it("test cuando no hay descuentos por codigo devuelve zero ", function(){
+        let fechaHora = new Date(2019, 11, 13, 18, 35); 
+        let reserva = new Reserva(fechaHora, 7, 450,);
+        let resut = reserva.descuentosPorCodigos();
+        
+        expect(0).to.equal(resut);
+    })
+})
+
+describe("test la funcion adicionalesPorSemana()", function(){
+    it("test cuando se seleciona un adicional por ser el dia viernes, sabado, domingo ", function(){
+        let fechaHora = new Date(2019, 11, 13, 18, 35);
+        let reserva = new Reserva(fechaHora, 9, 450,)
+        let resut = reserva.adicionalesPorSemana();
+        
+        expect(405).to.equal(resut);
+    })
+
+    it("test cuando no se seleciona ningun dia con adicionales ", function(){
+        let fechaHora = new Date(2019, 11, 11, 18, 35);
+        let reserva = new Reserva(fechaHora, 9, 450,)
+        let resut = reserva.adicionalesPorSemana();
+        
+        expect(0).to.equal(resut);
+    })
+})
+
+describe("test la funcion adicionalesPorHorarios()", function(){
+    it("test cuando la reserva esta en horarios 13, 14 o 20, 21 horas un adicional de 5%",function(){
+        let fechaHora = new Date(2019, 11, 13, 13, 35);
+        let reserva = new Reserva(fechaHora, 9, 500,)
+        let resut = reserva.adicionalesPorHorarios();
+    
+        expect(225).to.equal(resut);
+    
+    })
+
+    it("test cuando no se seleciona una hora con adicionales ", function(){
+        let fechaHora = new Date(2019, 11, 11, 15, 35);
+        let reserva = new Reserva(fechaHora, 9, 450,)
+        let resut = reserva.adicionalesPorSemana();
+        
+        expect(0).to.equal(resut);
+
+    })
+
+})
+
+describe("test la funcion precioTotalReserva()",function(){
+    it("test que la funcion cumple con los descuentos y adicinales requeridos", function(){
+        let fechaHora = new Date (2019, 11, 14, 20, 30);
+        let reserva = new Reserva(fechaHora, 9, 650, "DES15")
+        let result = reserva.precioTotalReserva();
+
+        expect(4972.5).to.equal(result);
+
+    })
+
+})
