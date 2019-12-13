@@ -144,3 +144,14 @@ describe("Testeá la función obtenerRestaurantes()", function() {
         
     })
 });
+
+//testing de reserva 
+
+describe("Test la función precioReservaBase ()", function(){
+     it("Test la función  precioReservaBase()", function(){
+         let fechaHora = new Date(2019, 11, 11, 20, 55); // te estan faltando parametros
+         let reserva = (fechaHora, 6, 500,"DES15");
+
+     })
+
+});
