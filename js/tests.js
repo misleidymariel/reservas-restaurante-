@@ -149,8 +149,11 @@ describe("Testeá la función obtenerRestaurantes()", function() {
 
 describe("Test la función precioReservaBase ()", function(){
      it("Test la función  precioReservaBase()", function(){
-         let fechaHora = new Date(2019, 11, 11, 20, 55); // te estan faltando parametros
-         let reserva = (fechaHora, 6, 500,"DES15");
+        let fechaHora = new Date(2019, 11, 11, 20, 55); // te estan faltando parametros
+        let reserva = (fechaHora, 6, 500);
+        let resut = reserva.precioReservaBase (reserva, 6,500);
+        
+        expect(3000).to.equal(resut);
 
      })
 

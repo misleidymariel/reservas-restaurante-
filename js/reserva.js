@@ -46,7 +46,6 @@ Reserva.prototype.descuentosPorCodigos = function () {
 Reserva.prototype.precioTotalReserva = function () {
     var basePrecioFinal = this.precioReservaBase() + this.adicionales - this.descuentos
     result = basePrecioFinal;
-
 }
 
 Reserva.prototype.adicionalesPorSemana = function () {
